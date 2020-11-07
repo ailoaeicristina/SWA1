@@ -1,19 +1,19 @@
 export default (init_model, view, renderer) => {
-    let state = init_model
+    let model = init_model
 
-    function reducer(action, state) {
+    function reducer(action, model) {
         switch (action.type) {
             case 'update':
                 const { text } = action
-                return state.updateText(text)
+                return model.updateText(text)
     
             default:
-                return state
+                return model
         }
     }
 
     return action => {
-        state = reducer(action, state)
-        renderer(view(state))
+        model = reducer(action, model)
+        renderer(view(model))
     }
 }

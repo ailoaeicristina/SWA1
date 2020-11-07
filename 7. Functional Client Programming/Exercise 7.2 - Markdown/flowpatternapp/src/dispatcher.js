@@ -1,12 +1,10 @@
-const store = (type, ...params) => {
+export default store => ({ type, ...params }) => {
     switch (type) {
         case 'update':
-            const {text} = params
-            store({type, ...params, text})
+            const { text } = params
+            store({ type, ...params, text })
             break;
 
         default:
     }
 }
-
-export default store
