@@ -1,44 +1,55 @@
 import React from 'react'
-import { useHistory } from "react-router-dom";
-import styling from './index.css'
+import Select from 'react-select'
+import DatePicker from 'react-date-picker'
+import { RadioGroup, RadioButton } from 'react-radio-buttons'
 
-function HomeButton() {
-    const history = useHistory();
-  
-    function redirect() {
-      history.push("/home");
+function toggleHistoricalData() {
+    var data = document.getElementById("historicalData");
+    console.log("here")
+
+    if (data.style.display === "none") {
+        data.style.display = "block";
+    } else {
+        data.style.display = "none";
     }
-  
-    return (
-      <button type="button" onClick={redirect}>
-        Go home
-      </button>
-    );
-  }
+}
 
-/* export default dispatcher => () => (
-    
+const options = [
+    { value: 'Horsens', label: 'Horsens' },
+    { value: 'Aarhus', label: 'Aarhus' },
+    { value: 'Copenhagen', label: 'Copenhagen' }
+]
 
+const startDate = new Date()
+const endDate = new Date()
+
+export default dispatcher => () => (
     <div id='base'>
-        <div>
-            <button className="btn" onClick={redirect}>
+        <h4>Place</h4>
+        <div className="select">
+            <Select options={options} isClearable onChange={(event) => dispatcher()({ type: 'updatePlace', text: event.target.value })} />
+        </div>
+
+        <h4>From Date</h4>
+        <DatePicker />
+        <DatePicker selected={endDate} />
+
+        <h4>Type of data</h4>
+        <RadioGroup horizontal value="historical">
+            <RadioButton value="historical">
                 Historical data
-            </button>
-        </div>
-
-        <div>
-            <button className="btn" onClick={redirect}>
+            </RadioButton>
+            <RadioButton value="predictive">
                 Predictive data
-            </button>
-        </div>
-    </div>
+            </RadioButton>
+        </RadioGroup>
 
-    /*     <div id='base'>
+        {/*          <div id='base'>
             <input
                 type="text"
                 placeholder="Type something..."
                 onChange={(event) => dispatcher()({ type: 'update', text: event.target.value })}
             />
-            <div>{model.text}</div>
-        </div> 
-) */
+            <div>{model.text}</div> */}
+    </div>
+)

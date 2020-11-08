@@ -1,6 +1,6 @@
-export default store => ({ type, ...params }) => {
+export default store => async ({ type, ...params }) => {
     switch (type) {
-        case 'update':
+        case 'updatePlace':
             const { text } = params
             store({ type, ...params, text })
             break;
