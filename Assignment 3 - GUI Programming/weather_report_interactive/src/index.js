@@ -1,6 +1,5 @@
 import ReactDOM from 'react-dom';
 import model from './model.js'
-import newRecordModel from './NewRecordComponent/newRecordModel.js'
 import store from './store.js'
 import view from './view.js'
 import dispatcher from './dispatcher.js'
@@ -16,11 +15,10 @@ async function init() {
     var d = new Date()
     d.setDate(d.getDate() - 5)
     const theModel = model(historicals, predictions, 'All', d, new Date(), 'historical')
-    const theNewRecordModel = newRecordModel()
     let renderer = dom => ReactDOM.render(dom, document.getElementById('root'))
     let theDispatcher
     const theView = view(() => theDispatcher)
-    const theStore = store(theModel, theNewRecordModel, theView, renderer)
+    const theStore = store(theModel, theView, renderer)
     theDispatcher = dispatcher(theStore)
     renderer(theView(theModel))
   } catch (err) {

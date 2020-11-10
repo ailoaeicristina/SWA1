@@ -18,6 +18,13 @@ export default store => async ({ type, ...params }) => {
             break;
         case 'addHistoricalRecord':
             const { record } = params
+            const headers = { 'Content-Type': 'application/json', Accept: 'application/json' }
+            await fetch('http://localhost:8080/data',
+                {
+                    method: 'POST',
+                    body: JSON.stringify(record),
+                    headers
+                })
             store({ type, ...params, record })
             break;
         case 'refreshPredictionsClicked':

@@ -1,6 +1,5 @@
-export default (init_model, init_newRecordModel, view, renderer) => {
+export default (init_model, view, renderer) => {
     let model = init_model
-    let newRecordModel = init_newRecordModel
 
     function reducer(action, model) {
         switch (action.type) {
@@ -28,7 +27,7 @@ export default (init_model, init_newRecordModel, view, renderer) => {
     }
 
     return action => {
-        model = reducer(action, model, newRecordModel)
+        model = reducer(action, model)
         renderer(view(model))
     }
 }

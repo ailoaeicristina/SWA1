@@ -10,13 +10,13 @@ const model = (historicals, predictions, place, startDate, endDate, viewMode) =>
     records = records.filter(r => Date.parse(r.time) >= startDate.getTime())
     records = records.filter(r => Date.parse(r.time) <= endDate.getTime())
 
-    const updatePlace = newPlace => model(historicals, predictions, newPlace, startDate, endDate, viewMode, record)
-    const updateStartDate = newStartDate => model(historicals, predictions, place, newStartDate, endDate, viewMode, record)
-    const updateEndDate = newEndDate => model(historicals, predictions, place, startDate, newEndDate, viewMode, record)
-    const updateViewMode = newViewMode => model(historicals, predictions, place, startDate, endDate, newViewMode, record)
+    const updatePlace = newPlace => model(historicals, predictions, newPlace, startDate, endDate, viewMode)
+    const updateStartDate = newStartDate => model(historicals, predictions, place, newStartDate, endDate, viewMode)
+    const updateEndDate = newEndDate => model(historicals, predictions, place, startDate, newEndDate, viewMode)
+    const updateViewMode = newViewMode => model(historicals, predictions, place, startDate, endDate, newViewMode)
 
-    const addHistoricalRecord = newRecord => model(historicals.concat(newRecord), predictions, place, startDate, endDate, viewMode, record)
-    const refreshPredictions = refreshPredictions => model(historicals, refreshPredictions, place, startDate, endDate, viewMode, record)
+    const addHistoricalRecord = newRecord => model(historicals.concat(newRecord), predictions, place, startDate, endDate, viewMode)
+    const refreshPredictions = refreshPredictions => model(historicals, refreshPredictions, place, startDate, endDate, viewMode)
 
     //#region get historical data
     // Minimum temperatures for the date interval

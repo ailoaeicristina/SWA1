@@ -13,15 +13,6 @@ const options = [
     { value: 'Copenhagen', label: 'Copenhagen' }
 ]
 
-const typeOptions = [
-    { value: 'temperature', label: 'Temperature' },
-    { value: 'precipitation', label: 'Precipitation' },
-    { value: 'wind speed', label: 'Wind Speed' },
-    { value: 'cloud coverage', label: 'Cloud Coverage' }
-]
-
-let newDate = new Date()
-
 export default dispatcher => (model) => (
     <div id='base'>
         <h4>Place</h4>
@@ -55,7 +46,7 @@ export default dispatcher => (model) => (
                 columns={[{ name: 'average', selector: 'average' }, { name: 'unit', selector: 'unit' }, { name: 'place', selector: 'place' }]} />
 
             <div className="record">
-               <NewRecord></NewRecord>
+                <NewRecord dispatcher={dispatcher}></NewRecord>
             </div>
         </div>
 
