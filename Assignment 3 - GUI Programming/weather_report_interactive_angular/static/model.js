@@ -1,19 +1,9 @@
 const model = (historicals, predictions, place, startDate, endDate, viewMode) => {
-    console.log("---------- model output")
     let records = viewMode === 'historical' ? historicals : predictions
-    console.log(place)
-    console.log(startDate)
-    console.log(endDate)
-    console.log(viewMode)
-    console.log(records)
-    console.log("---------- model output end")
     const places = place === 'All' ? ['Horsens', 'Aarhus', 'Copenhagen'] : [place]
     records = records.filter(r => place === 'All' || r.place === place)
     records = records.filter(r => Date.parse(r.time) >= startDate.getTime())
     records = records.filter(r => Date.parse(r.time) <= endDate.getTime())
-
-    const addHistoricalRecord = newRecord => { historicals.concat(newRecord) }
-    const refreshPredictions = refreshPredictions => { predictions = refreshPredictions }
 
     //#region get historical data
     // Minimum temperatures for the date interval
@@ -80,6 +70,7 @@ const model = (historicals, predictions, place, startDate, endDate, viewMode) =>
         if (avgCC !== 0)
             avgCloudCoverage.push({ average: avgCC, unit: avgCCFirstObj.unit, place: p })
     });
+
     //#endregion
 
     //#region get predictive data
@@ -90,7 +81,7 @@ const model = (historicals, predictions, place, startDate, endDate, viewMode) =>
     //#endregion
 
     return {
-        historicals, predictions, place, startDate, endDate, viewMode, addHistoricalRecord, refreshPredictions,
+        historicals, predictions, place, startDate, endDate, viewMode,
         minTemperatures, maxTemperatures, totalPrecipitations, avgWindSpeed, dominantWindDirection, avgCloudCoverage,
         temperaturePredictions, precipitationPredictions, windSpeedPredictions, cloudCoveragePredictions
     }

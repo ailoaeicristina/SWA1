@@ -12,7 +12,7 @@
 <body ng-controller="WeatherReportController">
     <div id='base'>
         <h4>Place</h4>
-        <select className="selector" ng-model='model.place'>
+        <select className="selector" ng-model='model.place' ng-change='updateModel()'>
             <option value='All'>All</option>
             <option value='Horsens'>Horsens</option>
             <option value='Aarhus'>Aarhus</option>
@@ -20,53 +20,83 @@
         </select>
 
         <h4>Start Date &emsp; &emsp; &emsp; &emsp; End Date</h4>
-        <input type="date" ng-model='model.startDate' />
-        <input type="date" ng-model='model.endDate' />
+        <input type="date" ng-model='model.startDate' ng-change='updateModel()'/>
+        <input type="date" ng-model='model.endDate' ng-change='updateModel()'/>
 
         <h4>View mode</h4>
         <form>
-            <input type="radio" value="historical" ng-model='model.viewMode' />Historical data
-            <input type="radio" value="predictive" ng-model='model.viewMode' />Predictive data
+            <input type="radio" value="historical" ng-model='model.viewMode' ng-change='updateModel()' />Historical data
+            <input type="radio" value="predictive" ng-model='model.viewMode' ng-change='updateModel()' />Predictive data
         </form>
 
         <div ng-switch="model.viewMode">
             <div ng-switch-when="historical">
                 <h2>Minimum temperatures for the date interval</h2>
-                <temperature-table attribute='minTemperatures' />
+                <temperature-table attribute='minTemperatures' ></temperature-table>
 
                 <h2>Maximum temperatures for the date interval</h2>
-                <temperature-table attribute='maxTemperatures' />
+                <temperature-table attribute='maxTemperatures' ></temperature-table>
 
                 <h2>Total precipitations for the date interval</h2>
-                <precipitation-table attribute='totalPrecipitations' />
+                <precipitation-table attribute='totalPrecipitations' ></precipitation-table>
 
                 <h2>Average wind speed for the date interval</h2>
-                <windspeed-table attribute='avgWindSpeed' />
+                <windspeed-table attribute='avgWindSpeed' ></windspeed-table>
 
                 <h2>Dominant wind direction for the date interval</h2>
-                <winddirection-table attribute='dominantWindDirection' />
+                <winddirection-table attribute='dominantWindDirection' ></winddirection-table>
 
                 <h2>Average cloud coverage for the date interval</h2>
-                <cloudcoverage-table attribute='avgCloudCoverage' />
+                <cloudcoverage-table attribute='avgCloudCoverage' ></cloudcoverage-table>
 
                 <h2>Add a new record</h2>
+                <form ng-submit="addHistoricalRecord()">
+                    <label for="place" >Place</label>
+                    <select name="place" ng-model="model.newRecordModel.place">
+                        <option value='Horsens'>Horsens</option>
+                        <option value='Aarhus'>Aarhus</option>
+                        <option value='Copenhagen'>Copenhagen</option>
+                    </select>
+                    <br />
+                    <label for="type" >Type</label>
+                    <select name="type" ng-model="model.newRecordModel.type">
+                        <option value="temperature">Temperature</option>
+                        <option value="precipitation">Precipitation</option>
+                        <option value="wind speed">Wind Speed</option>
+                        <option value="cloud coverage">Cloud Coverage</option>
+                    </select>
+                    <br />
+                    <label for="value" >Value (metric unit)</label>
+                    <input type="text" ng-model="model.newRecordModel.value" name="value" />
+                    <br />
+                    <label for="time" >Time</label>
+                    <input type="datetime-local" ng-model="model.newRecordModel.time" name="time" />
+                    <br />
+                    <label for="precipitation_type" >Precipitaion type</label>
+                    <input type="text" ng-model="model.newRecordModel.precipitationType" name="precipitation_type" />
+                    <br />
+                    <label for="direction" >Direction</label>
+                    <input type="text" ng-model="model.newRecordModel.direction" name="direction" />
+                    <br />
+                    <input type="submit" value="Add Record" />
+                </form>
                 
             </div>
 
             <div ng-switch-when="predictive">
-                <button ng-click='model.refreshPredictions'>Refresh predictions</button>
+                <button ng-click='refreshPredictions()'>Refresh predictions</button>
 
                 <h2>Temperature predictions</h2>
-                <temperaturepredictions-table attribute='temperaturePredictions' />
+                <temperaturepredictions-table attribute='temperaturePredictions' ></temperaturepredictions-table>
 
                 <h2>Precipitation predictions</h2>
-                <precipitationpredictions-table attribute='precipitationPredictions' />
+                <precipitationpredictions-table attribute='precipitationPredictions' ></precipitationpredictions-table>
 
                 <h2>Wind speed predictions</h2>
-                <windspeedpredictions-table attribute='windSpeedPredictions' />
+                <windspeedpredictions-table attribute='windSpeedPredictions' ></windspeedpredictions-table>
 
                 <h2>Cloud coverage predictions</h2>
-                <cloudcoveragepredictions-table attribute='cloudCoveragePredictions' />
+                <cloudcoveragepredictions-table attribute='cloudCoveragePredictions' ></cloudcoveragepredictions-table>
             </div>
 
         </div>
