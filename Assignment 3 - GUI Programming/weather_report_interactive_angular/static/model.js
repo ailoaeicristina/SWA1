@@ -1,12 +1,5 @@
 const model = (historicals, predictions, place, startDate, endDate, viewMode) => {
-    console.log("---------- model output")
     let records = viewMode === 'historical' ? historicals : predictions
-    console.log(place)
-    console.log(startDate)
-    console.log(endDate)
-    console.log(viewMode)
-    console.log(records)
-    console.log("---------- model output end")
     const places = place === 'All' ? ['Horsens', 'Aarhus', 'Copenhagen'] : [place]
     records = records.filter(r => place === 'All' || r.place === place)
     records = records.filter(r => Date.parse(r.time) >= startDate.getTime())
