@@ -4,7 +4,7 @@ const module = angular.module('weatherReportApp', [])
 
 var d = new Date()
 d.setDate(d.getDate() - 5)
-module.value('$model', { historicals: [], predictions: [], place: 'All', startDate: d, endDate: new Date(), viewMode: 'historical' })
+module.value('$model', { historicals: [], predictions: [], place: 'All', startDate: d, endDate: new Date(), viewMode: 'historical', newRecordModel: {} })
 
 module.component('temperatureTable', {
   bindings: { attribute: '@' },
@@ -79,7 +79,7 @@ module.component('cloudcoverageTable', {
   template: `<table>
     <thead><tr><td>Average</td><td>Unit</td><td>Place</td></tr></thead>
     <tbody id='cloudcoverage_data'>
-        <tr ng-repeat="temperature in $ctrl.model[$ctrl.attribute]">
+        <tr ng-repeat="cloudcoverage in $ctrl.model[$ctrl.attribute]">
             <td>{{cloudcoverage.average}}</td>
             <td>{{cloudcoverage.unit}}</td>
             <td>{{cloudcoverage.place}}</td>
@@ -184,7 +184,7 @@ module.controller('WeatherReportController', function ($scope, $model, $http) {
     .catch(console.err)
 
   $scope.updateModel = () => {
-    let aModel = model($scope.model.historicals, $scope.model.predictions, $scope.model.place, $scope.model.startDate, $scope.model.endDate, $scope.model.viewMode)
+    aModel = model($scope.model.historicals, $scope.model.predictions, $scope.model.place, $scope.model.startDate, $scope.model.endDate, $scope.model.viewMode)
     updateViewModelFromModel($scope.model, aModel)
   }
 
@@ -198,7 +198,39 @@ module.controller('WeatherReportController', function ($scope, $model, $http) {
   }
 
   $scope.addHistoricalRecord = () => {
-    console.log("adding record")
+    let dateTime = new Date($model.newRecordModel.time)
+    let newRecord = { place: $model.newRecordModel.place, type: $model.newRecordModel.type, value: $model.newRecordModel.value, time: dateTime.toISOString() }
+
+    switch ($model.newRecordModel.type) {
+      case 'temperature':
+        newRecord['unit'] = 'C'
+        break;
+      case 'precipitation':
+        newRecord['precipitation_type'] = $model.newRecordModel.precipitationType
+        newRecord['unit'] = 'mm'
+        break;
+      case 'wind speed':
+        newRecord['direction'] = $model.newRecordModel.direction
+        newRecord['unit'] = 'm/s'
+        break;
+      case 'cloud coverage':
+        newRecord['unit'] = '%'
+        break;
+    }
+
+    const headers = { 'Content-Type': 'application/json', Accept: 'application/json' }
+    fetch('http://localhost:8080/data',
+      {
+        method: 'POST',
+        body: JSON.stringify(newRecord),
+        headers
+      });
+
+    $scope.model.historicals.push(newRecord)
+    aModel = model($scope.model.historicals, $scope.model.predictions, $scope.model.place, $scope.model.startDate, $scope.model.endDate, $scope.model.viewMode)
+    updateViewModelFromModel($scope.model, aModel)
+
+    $model.newRecordModel = {}
   }
 })
 

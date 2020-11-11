@@ -5,9 +5,6 @@ const model = (historicals, predictions, place, startDate, endDate, viewMode) =>
     records = records.filter(r => Date.parse(r.time) >= startDate.getTime())
     records = records.filter(r => Date.parse(r.time) <= endDate.getTime())
 
-    const addHistoricalRecord = newRecord => { historicals.concat(newRecord) }
-    const refreshPredictions = refreshPredictions => { predictions = refreshPredictions }
-
     //#region get historical data
     // Minimum temperatures for the date interval
     let minTemperatures = []
@@ -73,6 +70,7 @@ const model = (historicals, predictions, place, startDate, endDate, viewMode) =>
         if (avgCC !== 0)
             avgCloudCoverage.push({ average: avgCC, unit: avgCCFirstObj.unit, place: p })
     });
+
     //#endregion
 
     //#region get predictive data
@@ -83,7 +81,7 @@ const model = (historicals, predictions, place, startDate, endDate, viewMode) =>
     //#endregion
 
     return {
-        historicals, predictions, place, startDate, endDate, viewMode, addHistoricalRecord, refreshPredictions,
+        historicals, predictions, place, startDate, endDate, viewMode,
         minTemperatures, maxTemperatures, totalPrecipitations, avgWindSpeed, dominantWindDirection, avgCloudCoverage,
         temperaturePredictions, precipitationPredictions, windSpeedPredictions, cloudCoveragePredictions
     }

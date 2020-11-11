@@ -50,6 +50,36 @@
                 <cloudcoverage-table attribute='avgCloudCoverage' ></cloudcoverage-table>
 
                 <h2>Add a new record</h2>
+                <form ng-submit="addHistoricalRecord()">
+                    <label for="place" >Place</label>
+                    <select name="place" ng-model="model.newRecordModel.place">
+                        <option value='Horsens'>Horsens</option>
+                        <option value='Aarhus'>Aarhus</option>
+                        <option value='Copenhagen'>Copenhagen</option>
+                    </select>
+                    <br />
+                    <label for="type" >Type</label>
+                    <select name="type" ng-model="model.newRecordModel.type">
+                        <option value="temperature">Temperature</option>
+                        <option value="precipitation">Precipitation</option>
+                        <option value="wind speed">Wind Speed</option>
+                        <option value="cloud coverage">Cloud Coverage</option>
+                    </select>
+                    <br />
+                    <label for="value" >Value (metric unit)</label>
+                    <input type="text" ng-model="model.newRecordModel.value" name="value" />
+                    <br />
+                    <label for="time" >Time</label>
+                    <input type="datetime-local" ng-model="model.newRecordModel.time" name="time" />
+                    <br />
+                    <label for="precipitation_type" >Precipitaion type</label>
+                    <input type="text" ng-model="model.newRecordModel.precipitationType" name="precipitation_type" />
+                    <br />
+                    <label for="direction" >Direction</label>
+                    <input type="text" ng-model="model.newRecordModel.direction" name="direction" />
+                    <br />
+                    <input type="submit" value="Add Record" />
+                </form>
                 
             </div>
 
