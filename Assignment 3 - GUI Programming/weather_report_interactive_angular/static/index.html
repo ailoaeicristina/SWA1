@@ -1,28 +1,75 @@
-<html ng-app='employeeApp'>
-<head> 
-    <title>People</title>
-    <style>
-        td {
-            width: 40px;
-            height: 40px;
-            border: 1px solid black;
-        }
-        table {
-            border: 1px solid black;
-            border-spacing: 0;
-        }
-    </style>
-    <script type = 'module'>
+<html ng-app='weatherReportApp'>
+
+<head>
+    <title>Weather Report</title>
+    <script type='module'>
         import 'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js'
         import './components.js'
     </script>
+    <link rel="stylesheet" href="index.css">
 </head>
-<body ng-controller="EmployeeController">
+
+<body ng-controller="WeatherReportController">
     <div id='base'>
-        <h1>People</h1>
-        <employee-table id='employees' attribute='persons'>
-        </employee-table>
-        <p>Salary: <input ng-model='model.salary'></p>
-    </div>
+        <h4>Place</h4>
+        <select className="selector" ng-model='model.place'>
+            <option value='All'>All</option>
+            <option value='Horsens'>Horsens</option>
+            <option value='Aarhus'>Aarhus</option>
+            <option value='Copenhagen'>Copenhagen</option>
+        </select>
+
+        <h4>Start Date &emsp; &emsp; &emsp; &emsp; End Date</h4>
+        <input type="date" ng-model='model.startDate' />
+        <input type="date" ng-model='model.endDate' />
+
+        <h4>View mode</h4>
+        <form>
+            <input type="radio" value="historical" ng-model='model.viewMode' />Historical data
+            <input type="radio" value="predictive" ng-model='model.viewMode' />Predictive data
+        </form>
+
+        <div ng-switch="model.viewMode">
+            <div ng-switch-when="historical">
+                <h2>Minimum temperatures for the date interval</h2>
+                <temperature-table attribute='minTemperatures' />
+
+                <h2>Maximum temperatures for the date interval</h2>
+                <temperature-table attribute='maxTemperatures' />
+
+                <h2>Total precipitations for the date interval</h2>
+                <precipitation-table attribute='totalPrecipitations' />
+
+                <h2>Average wind speed for the date interval</h2>
+                <windspeed-table attribute='avgWindSpeed' />
+
+                <h2>Dominant wind direction for the date interval</h2>
+                <winddirection-table attribute='dominantWindDirection' />
+
+                <h2>Average cloud coverage for the date interval</h2>
+                <cloudcoverage-table attribute='avgCloudCoverage' />
+
+                <h2>Add a new record</h2>
+                
+            </div>
+
+            <div ng-switch-when="predictive">
+                <button ng-click='model.refreshPredictions'>Refresh predictions</button>
+
+                <h2>Temperature predictions</h2>
+                <temperaturepredictions-table attribute='temperaturePredictions' />
+
+                <h2>Precipitation predictions</h2>
+                <precipitationpredictions-table attribute='precipitationPredictions' />
+
+                <h2>Wind speed predictions</h2>
+                <windspeedpredictions-table attribute='windSpeedPredictions' />
+
+                <h2>Cloud coverage predictions</h2>
+                <cloudcoveragepredictions-table attribute='cloudCoveragePredictions' />
+            </div>
+
+        </div>
 </body>
+
 </html>

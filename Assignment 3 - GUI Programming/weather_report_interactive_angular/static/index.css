@@ -1,0 +1,16 @@
+.selector {
+    width: 25%;
+}
+
+.radioGroup {
+    width: 50%;
+}
+
+.datePicker {
+    margin-right: 20px;
+}
+
+.historical, .predictive {
+    margin-left: 1px;
+    margin-top: 20px;
+}
