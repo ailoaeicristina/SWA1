@@ -4,7 +4,7 @@ const module = angular.module('weatherReportApp', [])
 
 var d = new Date()
 d.setDate(d.getDate() - 5)
-module.value('$model', { historicals: [], predictions: [], place: 'All', startDate: d, endDate: new Date(), viewMode: 'historical' })
+module.value('$model', { historicals: [], predictions: [], place: 'All', startDate: d, endDate: new Date(), viewMode: 'historical', newRecordModel: {} })
 
 module.component('temperatureTable', {
   bindings: { attribute: '@' },
@@ -21,7 +21,6 @@ module.component('temperatureTable', {
   </table>`,
   controller: ['$model', '$scope', function ($model, $scope) {
     this.model = $model
-    console.log("Look here", $model)
   }]
 })
 
@@ -39,7 +38,6 @@ module.component('precipitationTable', {
   </table>`,
   controller: ['$model', '$scope', function ($model, $scope) {
     this.model = $model
-    console.log("Look here", $model)
   }]
 })
 
@@ -57,7 +55,6 @@ module.component('windspeedTable', {
   </table>`,
   controller: ['$model', '$scope', function ($model, $scope) {
     this.model = $model
-    console.log("Look here", $model)
   }]
 })
 
@@ -74,7 +71,6 @@ module.component('winddirectionTable', {
   </table>`,
   controller: ['$model', '$scope', function ($model, $scope) {
     this.model = $model
-    console.log("Look here", $model)
   }]
 })
 
@@ -83,7 +79,7 @@ module.component('cloudcoverageTable', {
   template: `<table>
     <thead><tr><td>Average</td><td>Unit</td><td>Place</td></tr></thead>
     <tbody id='cloudcoverage_data'>
-        <tr ng-repeat="temperature in $ctrl.model[$ctrl.attribute]">
+        <tr ng-repeat="cloudcoverage in $ctrl.model[$ctrl.attribute]">
             <td>{{cloudcoverage.average}}</td>
             <td>{{cloudcoverage.unit}}</td>
             <td>{{cloudcoverage.place}}</td>
@@ -92,19 +88,17 @@ module.component('cloudcoverageTable', {
   </table>`,
   controller: ['$model', '$scope', function ($model, $scope) {
     this.model = $model
-    console.log("Look here", $model)
   }]
 })
 
 module.component('temperaturepredictionsTable', {
   bindings: { attribute: '@' },
   template: `<table>
-    <thead><tr><td>From</td><td>To</td><td>Type</td><td>Unit</td><td>Time</td><td>Place</td></tr></thead>
+    <thead><tr><td>From</td><td>To</td><td>Unit</td><td>Time</td><td>Place</td></tr></thead>
     <tbody id='temperaturepredictions_data'>
         <tr ng-repeat="temperaturepredictions in $ctrl.model[$ctrl.attribute]">
             <td>{{temperaturepredictions.from}}</td>
             <td>{{temperaturepredictions.to}}</td>
-            <td>{{temperaturepredictions.type}}</td>
             <td>{{temperaturepredictions.unit}}</td>
             <td>{{temperaturepredictions.time}}</td>
             <td>{{temperaturepredictions.place}}</td>
@@ -113,20 +107,18 @@ module.component('temperaturepredictionsTable', {
   </table>`,
   controller: ['$model', '$scope', function ($model, $scope) {
     this.model = $model
-    console.log("Look here", $model)
   }]
 })
 
 module.component('precipitationpredictionsTable', {
   bindings: { attribute: '@' },
   template: `<table>
-    <thead><tr><td>From</td><td>To</td><td>Precipitation types</td><td>Type</td><td>Unit</td><td>Time</td><td>Place</td></tr></thead>
+    <thead><tr><td>From</td><td>To</td><td>Precipitation types</td><td>Unit</td><td>Time</td><td>Place</td></tr></thead>
     <tbody id='precipitationpredictions_data'>
         <tr ng-repeat="precipitationpredictions in $ctrl.model[$ctrl.attribute]">
             <td>{{precipitationpredictions.from}}</td>
             <td>{{precipitationpredictions.to}}</td>
             <td>{{precipitationpredictions.precipitation_types}}</td>
-            <td>{{precipitationpredictions.type}}</td>
             <td>{{precipitationpredictions.unit}}</td>
             <td>{{precipitationpredictions.time}}</td>
             <td>{{precipitationpredictions.place}}</td>
@@ -135,20 +127,18 @@ module.component('precipitationpredictionsTable', {
   </table>`,
   controller: ['$model', '$scope', function ($model, $scope) {
     this.model = $model
-    console.log("Look here", $model)
   }]
 })
 
 module.component('windspeedpredictionsTable', {
   bindings: { attribute: '@' },
   template: `<table>
-    <thead><tr><td>From</td><td>To</td><td>Directions</td><td>Type</td><td>Unit</td><td>Time</td><td>Place</td></tr></thead>
+    <thead><tr><td>From</td><td>To</td><td>Directions</td><td>Unit</td><td>Time</td><td>Place</td></tr></thead>
     <tbody id='windspeedpredictions_data'>
         <tr ng-repeat="windspeedpredictions in $ctrl.model[$ctrl.attribute]">
             <td>{{windspeedpredictions.from}}</td>
             <td>{{windspeedpredictions.to}}</td>
             <td>{{windspeedpredictions.directions}}</td>
-            <td>{{windspeedpredictions.type}}</td>
             <td>{{windspeedpredictions.unit}}</td>
             <td>{{windspeedpredictions.time}}</td>
             <td>{{windspeedpredictions.place}}</td>
@@ -157,19 +147,17 @@ module.component('windspeedpredictionsTable', {
   </table>`,
   controller: ['$model', '$scope', function ($model, $scope) {
     this.model = $model
-    console.log("Look here", $model)
   }]
 })
 
 module.component('cloudcoveragepredictionsTable', {
   bindings: { attribute: '@' },
   template: `<table>
-    <thead><tr><td>From</td><td>To</td><td>Type</td><td>Unit</td><td>Time</td><td>Place</td></tr></thead>
+    <thead><tr><td>From</td><td>To</td><td>Unit</td><td>Time</td><td>Place</td></tr></thead>
     <tbody id='cloudcoveragepredictions_data'>
         <tr ng-repeat="cloudcoveragepredictions in $ctrl.model[$ctrl.attribute]">
             <td>{{cloudcoveragepredictions.from}}</td>
             <td>{{cloudcoveragepredictions.to}}</td>
-            <td>{{cloudcoveragepredictions.type}}</td>
             <td>{{cloudcoveragepredictions.unit}}</td>
             <td>{{cloudcoveragepredictions.time}}</td>
             <td>{{cloudcoveragepredictions.place}}</td>
@@ -178,33 +166,85 @@ module.component('cloudcoveragepredictionsTable', {
   </table>`,
   controller: ['$model', '$scope', function ($model, $scope) {
     this.model = $model
-    console.log("Look here", $model)
   }]
 })
 
 module.controller('WeatherReportController', function ($scope, $model, $http) {
   $scope.model = $model
-  console.log($scope.model)
   let aModel
+
   $http.get('http://localhost:8080/data')
     .then(({ data: data }) => {
       $http.get('http://localhost:8080/forecast')
         .then(({ data: forecast }) => {
           aModel = model(data, forecast, $scope.model.place, $scope.model.startDate, $scope.model.endDate, $scope.model.viewMode)
-          $scope.model.historicals = aModel.historicals
-          $scope.model.predictions = aModel.predictions
-          $scope.model.minTemperatures = aModel.minTemperatures
-          $scope.model.maxTemperatures = aModel.maxTemperatures
-          $scope.model.totalPrecipitations = aModel.totalPrecipitations
-          $scope.model.avgWindSpeed = aModel.avgWindSpeed
-          $scope.model.dominantWindDirection = aModel.dominantWindDirection
-          $scope.model.avgCloudCoverage = aModel.avgCloudCoverage
-          $scope.model.temperaturePredictions = aModel.temperaturePredictions
-          $scope.model.precipitationPredictions = aModel.precipitationPredictions
-          $scope.model.windspeedPredictions = aModel.windspeedPredictions
-          $scope.model.cloudcoveragePredictions = aModel.cloudcoveragePredictions
+          updateViewModelFromModel($scope.model, aModel)
         })
     })
     .catch(console.err)
-  console.log($scope.model)
+
+  $scope.updateModel = () => {
+    aModel = model($scope.model.historicals, $scope.model.predictions, $scope.model.place, $scope.model.startDate, $scope.model.endDate, $scope.model.viewMode)
+    updateViewModelFromModel($scope.model, aModel)
+  }
+
+  $scope.refreshPredictions = () => {
+    $http.get('http://localhost:8080/forecast')
+      .then(({ data: forecast }) => {
+        aModel = model($scope.model.historicals, forecast, $scope.model.place, $scope.model.startDate, $scope.model.endDate, $scope.model.viewMode)
+        updateViewModelFromModel($scope.model, aModel)
+      })
+      .catch(console.err)
+  }
+
+  $scope.addHistoricalRecord = () => {
+    let dateTime = new Date($model.newRecordModel.time)
+    let newRecord = { place: $model.newRecordModel.place, type: $model.newRecordModel.type, value: $model.newRecordModel.value, time: dateTime.toISOString() }
+
+    switch ($model.newRecordModel.type) {
+      case 'temperature':
+        newRecord['unit'] = 'C'
+        break;
+      case 'precipitation':
+        newRecord['precipitation_type'] = $model.newRecordModel.precipitationType
+        newRecord['unit'] = 'mm'
+        break;
+      case 'wind speed':
+        newRecord['direction'] = $model.newRecordModel.direction
+        newRecord['unit'] = 'm/s'
+        break;
+      case 'cloud coverage':
+        newRecord['unit'] = '%'
+        break;
+    }
+
+    const headers = { 'Content-Type': 'application/json', Accept: 'application/json' }
+    fetch('http://localhost:8080/data',
+      {
+        method: 'POST',
+        body: JSON.stringify(newRecord),
+        headers
+      });
+
+    $scope.model.historicals.push(newRecord)
+    aModel = model($scope.model.historicals, $scope.model.predictions, $scope.model.place, $scope.model.startDate, $scope.model.endDate, $scope.model.viewMode)
+    updateViewModelFromModel($scope.model, aModel)
+
+    $model.newRecordModel = {}
+  }
 })
+
+function updateViewModelFromModel(model, newModel) {
+  model.historicals = newModel.historicals
+  model.predictions = newModel.predictions
+  model.minTemperatures = newModel.minTemperatures
+  model.maxTemperatures = newModel.maxTemperatures
+  model.totalPrecipitations = newModel.totalPrecipitations
+  model.avgWindSpeed = newModel.avgWindSpeed
+  model.dominantWindDirection = newModel.dominantWindDirection
+  model.avgCloudCoverage = newModel.avgCloudCoverage
+  model.temperaturePredictions = newModel.temperaturePredictions
+  model.precipitationPredictions = newModel.precipitationPredictions
+  model.windSpeedPredictions = newModel.windSpeedPredictions
+  model.cloudCoveragePredictions = newModel.cloudCoveragePredictions
+}
