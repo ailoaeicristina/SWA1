@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <script type="module">
+
+        import { ajax } from 'https://dev.jspm.io/rxjs@6/_esm2015/ajax'
+        import { interval } from 'https://dev.jspm.io/rxjs@6/_esm2015'
+        import { delay, map, concatMap } from 'https://dev.jspm.io/rxjs@6/_esm2015/operators'
+
+        window.load = () => {
+            const ul = document.querySelector('ul')
+            const p = document.getElementById('FinalMessage')
+
+            const addBullet = warning => {
+                const li = document.createElement('li')
+                li.innerText = warning
+                ul.appendChild(li)
+            }
+
+            const log = x => {
+                console.log(x.time)
+                x.warnings.forEach(element => {
+                    console.log(JSON.stringify(element))
+                });
+                return x;
+            }
+
+            const updateDate = x => { date = x.time; url = `http://localhost:8080/warnings/since/${date}`; return x; }
+
+            const poll_url = () => interval(1000).pipe(concatMap(() => ajax.getJSON(url)))
+            var date = ''
+            var url = `http://localhost:8080/warnings/`
+            const poll = () => poll_url(url)
+                .pipe(
+                    map(log),
+                    map(updateDate)
+                )
+                .subscribe(addBullet)
+
+            return poll()
+        }
+    </script>
+</head>
+
+<body onload="load()">
+    <h3>Stream of warnings</h2>
+        <ul></ul>
+        <p id="FinalMessage"></p>
+</body>
+
+</html>

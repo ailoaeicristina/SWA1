@@ -1,0 +1,53 @@
+<html>
+
+<head>
+    <script type="module">
+        import { fromEvent } from 'https://dev.jspm.io/rxjs@6/_esm2015';
+        import { map, filter, scan, takeUntil, repeat } from 'https://dev.jspm.io/rxjs@6/_esm2015/operators';
+
+        window.load = () => {
+            const input = document.querySelector('input')
+            const buttonInsert = document.getElementById('btnInsert')
+            const buttonReset = document.getElementById('btnReset')
+            const p = document.getElementById('sum')
+
+            const log = x => { console.log(x); return x }
+            const getNumber = () => parseInt(input.value)
+            const updateUI = number => {
+                p.innerText = number
+                input.value = ''
+            }
+
+            fromEvent(buttonInsert, "click")
+                .pipe(
+                    map(getNumber),
+                    filter(number => number != ''),
+                    filter(number => number % 2 == 1),
+                    scan((x, y) => x + y, 0),
+                    map(log),
+                    takeUntil(fromEvent(buttonReset, "click")),
+                    repeat()
+                )
+                .subscribe(updateUI)
+
+            fromEvent(buttonReset, "click")
+                .pipe(
+                    map(number => 0),
+                    map(log),
+                )
+                .subscribe(updateUI)
+
+        }
+    </script>
+</head>
+
+<body onload="load()">
+    <input><button id="btnInsert">Insert</button>
+    <br>
+    <p>Sum of odd numbers: </p>
+    <p id="sum"></p>
+    <br>
+    <button id="btnReset">Reset sum</button>
+</body>
+
+</html>
