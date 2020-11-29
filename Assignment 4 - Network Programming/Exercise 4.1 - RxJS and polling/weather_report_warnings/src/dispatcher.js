@@ -8,13 +8,7 @@ const log = (data) => {
     return data;
 }
 
-export const pollWarnings = () => interval(5000).pipe(
-    map(({lastPoll}) => lastPoll ),
-    concatMap((lastPoll) => ajax.getJSON(`http://localhost:8080/warnings/since/${lastPoll}`)),
-    map(log),
-    map(data => store({ type: 'updateWarnings', ...data })),
-    takeWhile(({pollEnabled}) => pollEnabled, true)
-    );
+
 
 
 export default store => async ({ type, ...params }) => {

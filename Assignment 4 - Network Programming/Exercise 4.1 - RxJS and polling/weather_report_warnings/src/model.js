@@ -1,4 +1,4 @@
-const model = (warnings, pollEnabled, minSeverityLevel, lastPolled) => {
+const model = (warnings, pollEnabled, minSeverityLevel, lastPolled, observable) => {
     console.log(warnings)
     console.log(pollEnabled)
     console.log(minSeverityLevel)
@@ -21,13 +21,13 @@ const model = (warnings, pollEnabled, minSeverityLevel, lastPolled) => {
 
 
     //let severityLevels = [...new Set(recordsCopy.map(r => r.severity))].sort().map(sl => ({value : sl.toString(), label: sl.toString()}))
-    const updateMinSeverityLevel = newMinSeverityLevel => model(warnings, pollEnabled, newMinSeverityLevel, lastPolled)
+    const updateMinSeverityLevel = newMinSeverityLevel => model(warnings, pollEnabled, newMinSeverityLevel, lastPolled, observable)
     const togglePoll = () => {
         console.log("togglePoll")
-        return model(warnings, !pollEnabled, minSeverityLevel, lastPolled)
+        return model(warnings, !pollEnabled, minSeverityLevel, lastPolled, observable)
     }
     const updateWarnings = newData => {
-        return model(newData.warnings, pollEnabled, minSeverityLevel, newData.time)
+        return model(newData.warnings, pollEnabled, minSeverityLevel, newData.time, observable)
     };
 
     let temperatureWarnings = warnings.filter(r => r.prediction.type === 'temperature')
