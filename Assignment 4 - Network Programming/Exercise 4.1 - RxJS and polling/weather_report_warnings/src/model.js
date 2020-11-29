@@ -1,29 +1,18 @@
 const model = (warnings, pollEnabled, minSeverityLevel, lastPolled, started) => {
 
-    
     let highestSeverityLevel = warnings.map(record => record.severity).reduce((prev, curr) => prev >= curr ? prev : curr)
     let severityLevels = Array.from({length: highestSeverityLevel}, (x, i) => i + 1).map(sl => ({value : sl.toString(), label: sl.toString()}))
     
     let pollTextOnOff = pollEnabled  ? 'Turn off warnings' : 'Turn on warnings'
 
-
-
-
-
-
     //let recordsCopy = records
     warnings = warnings.filter(r => r.severity >= minSeverityLevel)
 
-
-
-
-    //let severityLevels = [...new Set(recordsCopy.map(r => r.severity))].sort().map(sl => ({value : sl.toString(), label: sl.toString()}))
     const updateMinSeverityLevel = newMinSeverityLevel => model(warnings, pollEnabled, newMinSeverityLevel, lastPolled, started)
     const togglePoll = () => {
         return model(warnings, !pollEnabled, minSeverityLevel, lastPolled, started)
     }
     const updateWarnings = newData => {
-        console.log(newData)
         return model(newData.warnings, pollEnabled, minSeverityLevel, newData.time, started)
     };
 
