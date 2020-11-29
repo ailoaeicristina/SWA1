@@ -1,30 +1,28 @@
-const model = (warnings, warningsONOFF, minSeverityLevel) => {
-    let records = [...warnings.warnings]
-    let recordsCopy = records
-    records = records.filter(r => r.severity >= minSeverityLevel)
+const model = (warnings, pollEnabled, minSeverityLevel, lastPolled, started) => {
 
-    let warningsTextONOFF = warningsONOFF === 'ON' ? 'Turn off warnings' : 'Turn on warnings'
+    let highestSeverityLevel = warnings.map(record => record.severity).reduce((prev, curr) => prev >= curr ? prev : curr)
+    let severityLevels = Array.from({length: highestSeverityLevel}, (x, i) => i + 1).map(sl => ({value : sl.toString(), label: sl.toString()}))
+    
+    let pollTextOnOff = pollEnabled  ? 'Turn off warnings' : 'Turn on warnings'
 
-    let severityLevels = [...new Set(recordsCopy.map(r => r.severity))].sort().map(sl => ({value : sl.toString(), label: sl.toString()}))
-    const updateMinSeverityLevel = newMinSeverityLevel => model(warnings, warningsONOFF, newMinSeverityLevel)
+    //let recordsCopy = records
+    warnings = warnings.filter(r => r.severity >= minSeverityLevel)
 
-    const refreshWarnings = refreshedWarnings => {
-        if (warningsONOFF === 'ON') {
-            return model(warnings, 'OFF')
-        }
-        else if (warningsONOFF === 'OFF') {
-            return model(refreshedWarnings, 'ON')
-        }
+    const updateMinSeverityLevel = newMinSeverityLevel => model(warnings, pollEnabled, newMinSeverityLevel, lastPolled, started)
+    const togglePoll = () => {
+        return model(warnings, !pollEnabled, minSeverityLevel, lastPolled, started)
     }
+    const updateWarnings = newData => {
+        return model(newData.warnings, pollEnabled, minSeverityLevel, newData.time, started)
+    };
 
-    let lastUpdated = warnings.time
-    let temperatureWarnings = records.filter(r => r.prediction.type === 'temperature')
-    let precipitationWarnings = records.filter(r => r.prediction.type === 'precipitation')
-    let windSpeedWarnings = records.filter(r => r.prediction.type === 'wind speed')
-    let cloudCoverageWarnings = records.filter(r => r.prediction.type === 'cloud coverage')
+    let temperatureWarnings = warnings.filter(r => r.prediction.type === 'temperature')
+    let precipitationWarnings = warnings.filter(r => r.prediction.type === 'precipitation')
+    let windSpeedWarnings = warnings.filter(r => r.prediction.type === 'wind speed')
+    let cloudCoverageWarnings = warnings.filter(r => r.prediction.type === 'cloud coverage')
 
     return {
-        records, warningsTextONOFF, severityLevels, minSeverityLevel, lastUpdated, updateMinSeverityLevel, refreshWarnings,
+        warnings, lastPolled, pollEnabled, pollTextOnOff, severityLevels, minSeverityLevel, updateMinSeverityLevel, togglePoll, updateWarnings,
         temperatureWarnings, precipitationWarnings, windSpeedWarnings, cloudCoverageWarnings
     }
 }

@@ -1,36 +1,26 @@
 import ReactDOM from 'react-dom';
 import model from './model.js'
-import store from './store.js'
-import view from './view.js'
+import { reduce } from './store'
 import dispatcher from './dispatcher.js'
-import { Observable } from 'rxjs'
-import { map, mergeMap, scan } from 'rxjs/operators'
+import { create_view } from './view.js'
+import { map, mergeMap, scan, } from 'rxjs/operators'
+import { Subject , of} from 'rxjs';
 
-async function init() {
-  try {
-    const warnings_res = await fetch('http://localhost:8080/warnings')
-    const warnings = await warnings_res.json()
+fetch('http://localhost:8080/warnings')
+.then(res => res.json())
+.then(data => {
+  const actions = new Subject()
+  const dispatch = action => actions.next(action)
+  const render = dom => ReactDOM.render(dom, document.getElementById('root'))
+  const view = create_view(dispatch)
+  const init_state = model(data.warnings, false, "1", data.time, false)
+  
+  render(view(init_state))
 
-    const observable = new Observable()
-
-    const theModel = model(warnings, 'ON')
-    let renderer = dom => ReactDOM.render(dom, document.getElementById('root'))
-    let theDispatcher
-    const theView = view(() => theDispatcher)
-    const theStore = store(theModel, theView, renderer)
-    theDispatcher = dispatcher(theStore)
-
-    renderer(theView(theModel))
-
-    observable.pipe(
-      mergeMap(dispatcher),
-      scan(store, theModel),
-      map(theView)
-    )
-    .subscribe(renderer)
-  } catch (err) {
-    console.log(err)
-  }
-}
-
-init()
+  actions.pipe(
+    mergeMap(dispatcher),
+    scan(reduce, init_state),
+    map(view)
+  )
+  .subscribe(render)
+})
